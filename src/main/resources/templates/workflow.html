@@ -1,0 +1,260 @@
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <title>Work Flow 状态界面</title>
+        <meta http-equiv="Content-Type" content="text/workflow;charset=UTF-8"></meta>
+        <link href="css/bootstrap.css" rel="stylesheet"/>
+        <link href="css/bootstrap-table.css" rel="stylesheet"/>
+        <script src="js/echarts.js"></script>
+        <script src="js/jquery-3.2.1.js"></script>
+        <script src="js/bootstrap.js"></script>
+    </head>
+    <body>
+        <div>
+            <table class="table">
+                <caption>任务信息</caption>
+                <thead>
+                    <tr>
+                        <th>任务ID</th>
+                        <th>任务名字</th>
+                        <th>操作</th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+	    <div id="main" style="width:600px;height:400px"></div>
+
+        <script type="text/javascript">
+            (function ($) {
+                var settings = {};
+                var myChart ;
+                function init(){
+                    myChart = echarts.init(document.getElementById("main"));
+                    var option = {
+                        title: {
+                            text: 'Work Flow 状态信息'
+                        },
+                        tooltip: {},
+                        animationDurationUpdate: 1500,
+                        animationEasingUpdate: 'quinticInOut',
+                        series : [{
+                            type: 'graph',
+                            layout: 'none',
+                            symbolSize: 50,
+                            roam: true,
+                            label: {
+                                normal: {
+                                    show: true
+                                }
+                            },
+                            edgeSymbol: ['circle', 'arrow'],
+                            edgeSymbolSize: [4, 10],
+                            edgeLabel: {
+                                normal: {
+                                    textStyle: {
+                                        fontSize: 20
+                                    }
+                                }
+                            },
+                            data: [{
+                                name: '上传',
+                                x: 300,
+                                y: 300
+                            }, {
+                                name: '转化',
+                                x: 400,
+                                y: 300
+                            }, {
+                                name: 'GIS检查',
+                                x: 500,
+                                y: 300
+                            }, {
+                                name: 'ST测试',
+                                x: 600,
+                                y: 300
+                            }, {
+                                name: '是否同意',
+                                x: 500,
+                                y: 200
+                            }],
+                            // links: [],
+                            links: [{
+                                source: '上传',
+                                target: '转化'
+                            }, {
+                                source: '转化',
+                                target: 'GIS检查'
+                            }, {
+                                source: 'GIS检查',
+                                target: 'ST测试'
+                            },{
+                                source: 'GIS检查',
+                                target: '是否同意',
+                                lineStyle: {
+                                    normal: {
+                                        color:'#0f0'
+                                    }
+                                }
+                            }, {
+                                source: 'ST测试',
+                                target: '完成'
+                            }],
+                            lineStyle: {
+                                normal: {
+                                    opacity: 0.9,
+                                    width: 2,
+                                    curveness: 0
+                                }
+                            }
+                        }]
+                    };
+	                myChart.setOption(option);
+                }
+
+                /**
+                 * 展示进度
+                 */
+                function showProcess(dataArr) {
+                    var option = {
+                        series : [{
+                            links: [{
+                                source: '上传',
+                                target: '转化',
+                                lineStyle: {
+                                    normal: {
+                                        color:'#0f0'
+                                    }
+                                }
+                            }, {
+                                source: '转化',
+                                target: 'GIS检查',
+                                lineStyle: {
+                                    normal: {
+                                        color:'#0f0'
+                                    }
+                                }
+                            }, {
+                                source: 'GIS检查',
+                                target: 'ST测试'
+                            },{
+                                source: 'GIS检查',
+                                target: '是否同意'
+                            }, {
+                                source: 'ST测试',
+                                target: '完成'
+                            }]
+                        }]
+                    };
+                    myChart.setOption(option);
+                }
+
+                init();
+                showProcess(null);
+            })(jQuery);
+
+
+	    </script>
+        <script th:inline="javascript">
+            (function ($) {
+                var settings = {};
+                var dataBody ;
+
+                function init(){
+                    console.info("开始初始化table控件对象");
+                    dataBody = $("#dataBody");
+                }
+
+                /**
+                 * 载入数据
+                 */
+                function loadData(){
+                  $.ajax({
+                        url:'/getTasks/gisdriver',
+                        type:'GET',
+                        success:data
+                    });
+                  console.debug(data);
+    /*                var dataArr = new Array();
+                    var count = 10;
+                    for(var index=0; index &lt; count; index++){
+                        var obj = new Object();
+                        obj["taskId"] = index;
+                        obj["taskName"] = "task-"+index;
+                        dataArr.push(obj);
+                    }
+                    var tbodyStr = template(dataArr);
+                    fullTable(tbodyStr);*/
+                }
+
+                /**
+                 * 根据模板初始化数据到模板当中去
+                 */
+                function template(dataArr){
+                    var tbodyStr = "";
+                    for(var index=0;index &lt; dataArr.length;++index){
+                        tbodyStr += "<tr>"
+                                    + "<td>" + dataArr[index]["taskId"] + "</td>"
+                                    + "<td>" + dataArr[index]["taskName"] + "</td>"
+                                    + "<td>"
+                                    +    "<button name='cancel-"+dataArr[index]["taskId"]+"' type='button' class='btn btn-danger'>cancel</button>"
+                                    +    "<button name='approve-"+dataArr[index]["taskId"]+"' type='button' class='btn btn-success'>approve</button>"
+                                    + "</td>"
+                                    +"</tr>"
+                    }
+                    return tbodyStr;
+                }
+
+                /**
+                 * 填充表格数据信息，并且注册click事件
+                 * */
+                function fullTable(tbodyStr){
+                    dataBody.html(tbodyStr);
+                    listener();
+                }
+
+                /**
+                 * 加载监听器
+                 */
+                function listener(){
+                    listenerTr();
+                    listenerBtn();
+                }
+
+                function listenerTr(){
+                    var trs = dataBody.find("tr");
+                    for(var index=0;index &lt; trs.length;++index){
+                        $(trs[index]).click(function () {
+                            for(var number=0;number &lt; trs.length;++number){
+                                $(trs[number]).css("background-color","#ffffff");
+                            }
+                            $(this).css("background-color","#ffdc44");
+                        });
+                    }
+                }
+
+                function listenerBtn(){
+                    var cancels = dataBody.find("button[name^='cancel']");
+                    for(var index=0;index &lt; cancels.length;++index){
+                        $(cancels[index]).click(function () {
+                            var btnName = $(this).attr("name");
+                            var taskId = btnName.split("-")[1];
+                            alert("cancel点击了这个按钮"+taskId);
+                        });
+                    }
+
+                    var approves = dataBody.find("button[name^='approve']");
+                    for(var index=0;index &lt; approves.length;++index){
+                        $(approves[index]).click(function () {
+                            var btnName = $(this).attr("name");
+                            var taskId = btnName.split("-")[1];
+                            alert("approve点击了这个按钮"+taskId);
+                        });
+                    }
+                }
+
+                init();
+                loadData();
+            })(jQuery);
+
+        </script>
+    </body>
+</html>

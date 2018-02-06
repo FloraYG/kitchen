@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:activiti="http://activiti.org/bpmn" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" xmlns:tns="http://www.activiti.org/test" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" expressionLanguage="http://www.w3.org/1999/XPath" id="m1510109562114" name="" targetNamespace="http://www.activiti.org/test" typeLanguage="http://www.w3.org/2001/XMLSchema">
+  <process id="SequenceForGM" isClosed="false" isExecutable="true" name="GM" processType="None">
+    <startEvent id="StartGMEvent" name="StartEvent"/>
+    <serviceTask activiti:class="com.example.helloActiviti.service.impl.SaveFileServiceImpl" activiti:exclusive="true" id="saveFiles" name="saveFiles"/>
+    <sequenceFlow id="_4" sourceRef="StartGMEvent" targetRef="saveFiles"/>
+    <userTask activiti:assignee="gisdriver" activiti:exclusive="true" id="doSomething" name="doSomething"/>
+    <sequenceFlow id="_8" sourceRef="saveFiles" targetRef="doSomething"/>
+    <endEvent id="EndGmEvent" name="EndGmEvent"/>
+    <sequenceFlow id="_10" sourceRef="doSomething" targetRef="EndGmEvent"/>
+    <intermediateCatchEvent id="_3" name="IntermediateCatchingEvent"/>
+    <intermediateThrowEvent id="_5" name="IntermediateThrowingEvent"/>
+  </process>
+  <bpmndi:BPMNDiagram documentation="background=#3C3F41;count=1;horizontalcount=1;orientation=0;width=842.4;height=1195.2;imageableWidth=832.4;imageableHeight=1185.2;imageableX=5.0;imageableY=5.0" id="Diagram-_1" name="New Diagram">
+    <bpmndi:BPMNPlane bpmnElement="SequenceForGM">
+      <bpmndi:BPMNShape bpmnElement="StartGMEvent" id="Shape-StartGMEvent">
+        <omgdc:Bounds height="32.0" width="32.0" x="95.0" y="160.0"/>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="32.0" width="32.0" x="0.0" y="0.0"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="saveFiles" id="Shape-saveFiles">
+        <omgdc:Bounds height="65.0" width="95.0" x="210.0" y="145.0"/>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="65.0" width="95.0" x="0.0" y="0.0"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="doSomething" id="Shape-doSomething">
+        <omgdc:Bounds height="55.0" width="95.0" x="380.0" y="150.0"/>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="55.0" width="95.0" x="0.0" y="0.0"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="EndGmEvent" id="Shape-EndGmEvent">
+        <omgdc:Bounds height="32.0" width="32.0" x="550.0" y="160.0"/>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="32.0" width="32.0" x="0.0" y="0.0"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="_2" id="Shape-_2">
+        <omgdc:Bounds height="32.0" width="32.0" x="320.0" y="45.0"/>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="32.0" width="32.0" x="0.0" y="0.0"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="_3" id="Shape-_3">
+        <omgdc:Bounds height="32.0" width="32.0" x="325.0" y="265.0"/>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="32.0" width="32.0" x="0.0" y="0.0"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="_5" id="Shape-_5">
+        <omgdc:Bounds height="32.0" width="32.0" x="310.0" y="440.0"/>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="32.0" width="32.0" x="0.0" y="0.0"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge bpmnElement="_4" id="BPMNEdge__4" sourceElement="StartGMEvent" targetElement="saveFiles">
+        <omgdi:waypoint x="127.0" y="176.0"/>
+        <omgdi:waypoint x="210.0" y="177.5"/>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="0.0" width="0.0" x="0.0" y="0.0"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="_8" id="BPMNEdge__8" sourceElement="saveFiles" targetElement="doSomething">
+        <omgdi:waypoint x="305.0" y="177.5"/>
+        <omgdi:waypoint x="380.0" y="177.5"/>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="0.0" width="0.0" x="0.0" y="0.0"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="_10" id="BPMNEdge__10" sourceElement="doSomething" targetElement="EndGmEvent">
+        <omgdi:waypoint x="475.0" y="177.5"/>
+        <omgdi:waypoint x="550.0" y="176.0"/>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="0.0" width="0.0" x="0.0" y="0.0"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>
