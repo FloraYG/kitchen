@@ -29,12 +29,9 @@ public class TransferMp3ToSony {
                     Files.copy(Paths.get(file.getParent() + File.separator + file.getName()),out);
                     System.out.print("The "+ count +" file copied");
                     count++;
-                } catch (FileNotFoundException e) {
-                    e.printStackTrace();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-                return;
             }
         });
     }
